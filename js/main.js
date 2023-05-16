@@ -7,38 +7,49 @@ function initSlider() {
 	addDots();
 	initNavigation();
 
-	function addSlides() {
-		slides.forEach((el, index) => {
+	function addSlides() { 
+		slides.forEach((slide, index) => { 
+			const slideListItems = createListItemsHTML(slide); 
+			const slideHTML = createSlideHTML(slide, index, slideListItems); 
+			appendSlideToDOM(slideHTML); 
+		});
+		
+		function createListItemsHTML(slide) { 
 			let slideListItems = '';
-			slides[index].listItems.forEach((item) => {
+			slide.listItems.forEach((item) => {
 				slideListItems += `<div class="slider__text-item"><span>${item.title}</span><p>${item.description}</p></div>`;
 			});
-			
-			let slide = `<div class="slider__slide${index === 0 ? " active" : ""}" data-index="${index}"><div class="slider__text"><div class="slider__text-title">${slides[index].title}</div><p>${slides[index].description}</p>${slideListItems}</div><div class="slider__img"><img src="${slides[index].imgUrl}"></div></div>`;
-			
-			slider.querySelector('.slider__content').innerHTML += slide;
-		})
-	}
+			return slideListItems;
+		} 
+
+		function createSlideHTML(slide, index, slideListItems) { 
+			return `<div class="slider__slide${index === 0 ? " active" : ""}" data-index="${index}"><div class="slider__text"><div class="slider__text-title">${slide.title}</div><p>${slide.description}</p>${slideListItems}</div><div class="slider__img"><img src="${slide.imgUrl}"></div></div>`;
+		} 
+
+		function appendSlideToDOM(slideHTML) { 
+			slider.querySelector('.slider__content').innerHTML += slideHTML; 
+		}
+	} 
 
 	function initNavigation() {
 		let nav = slider.querySelectorAll('.slider__nav-element');
-		let nextSlideNumber = 0;
+		
+		nav.forEach(el => el.addEventListener('click', handleNavigationClick))
 
-		nav.forEach(el => {
-			el.addEventListener('click', function () {
-				let currentSlide = +slider.querySelector('.active').dataset.index;
-
-				if (el.classList.contains('slider__arrow--prev')) {
-					nextSlideNumber = (currentSlide === 0) ? slides.length - 1 : nextSlideNumber - 1
-				} else if (el.classList.contains('slider__arrow--next')) {
-					nextSlideNumber = currentSlide === slides.length - 1 ? 0 : nextSlideNumber + 1
-				} else {
-					nextSlideNumber = +el.dataset.index;
-				}
-			
-				switchActiveElements(nextSlideNumber);
-			})
-		})
+		function handleNavigationClick() { 
+			let currentSlide = +slider.querySelector('.active').dataset.index;
+			let nextSlideNumber;
+	
+			if (this.classList.contains('slider__arrow--prev')) {
+				nextSlideNumber = currentSlide === 0 ? slides.length - 1 : currentSlide - 1
+			} else if (this.classList.contains('slider__arrow--next')) {
+				nextSlideNumber = currentSlide === slides.length - 1 ? 0 : currentSlide + 1
+			} else {
+				nextSlideNumber = +this.dataset.index;
+			}
+		
+			switchActiveElements(nextSlideNumber);
+		}
 	}
 
 	function addDots() {
