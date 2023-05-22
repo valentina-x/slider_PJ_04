@@ -13,23 +13,23 @@ function initSlider() {
 			const slideHTML = createSlideHTML(slide, index, slideListItems); 
 			appendSlideToDOM(slideHTML); 
 		});
-		
-		function createListItemsHTML(slide) { 
-			let slideListItems = '';
-			slide.listItems.forEach((item) => {
-				slideListItems += `<div class="slider__text-item"><span>${item.title}</span><p>${item.description}</p></div>`;
-			});
-			return slideListItems;
-		} 
-
-		function createSlideHTML(slide, index, slideListItems) { 
-			return `<div class="slider__slide${index === 0 ? " active" : ""}" data-index="${index}"><div class="slider__text"><div class="slider__text-title">${slide.title}</div><p>${slide.description}</p>${slideListItems}</div><div class="slider__img"><img src="${slide.imgUrl}"></div></div>`;
-		} 
-
-		function appendSlideToDOM(slideHTML) { 
-			slider.querySelector('.slider__content').innerHTML += slideHTML; 
-		}
 	} 
+
+	function createListItemsHTML(slide) { 
+		let slideListItems = '';
+		slide.listItems.forEach((item) => {
+			slideListItems += `<div class="slider__text-item"><span>${item.title}</span><p>${item.description}</p></div>`;
+		});
+		return slideListItems;
+	} 
+
+	function createSlideHTML(slide, index, slideListItems) { 
+		return `<div class="slider__slide${index === 0 ? " active" : ""}" data-index="${index}"><div class="slider__text"><div class="slider__text-title">${slide.title}</div><p>${slide.description}</p>${slideListItems}</div><div class="slider__img"><img src="${slide.imgUrl}"></div></div>`;
+	} 
+
+	function appendSlideToDOM(slideHTML) { 
+		slider.querySelector('.slider__content').innerHTML += slideHTML; 
+	}
 
 	function initNavigation() {
 		let nav = slider.querySelectorAll('.slider__nav-element');
